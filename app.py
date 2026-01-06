@@ -17,7 +17,7 @@ def load_data():
         return data
     except:
         return pd.DataFrame(columns=['Nomor Kursi', 'Nama Penumpang'])
-
+st.cache_data.clear() # Baris tambahan untuk hapus memori
 df_existing = load_data()
 
 # Pastikan kolom ada, jika tidak buat baru
