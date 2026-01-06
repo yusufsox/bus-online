@@ -8,11 +8,15 @@ st.set_page_config(page_title="Booking Bus 60 Kursi", layout="centered")
 # --- MASUKKAN LINK GOOGLE SHEET ANDA DI BAWAH INI ---
 URL_SHEET = "https://docs.google.com/spreadsheets/d/1eQ3sS8Gy-8QrE0RHfuFCQghA_Ph0tUdEtrr-JtCrqC4/edit?usp=sharing"
 
+# Ganti bagian pengambilan data (baris 13-18) dengan ini:
 try:
     conn = st.connection("gsheets", type=GSheetsConnection)
-    df_existing = conn.read(spreadsheet=URL_SHEET, usecols=[0, 1]).dropna()
+    df_existing = conn.read(spreadsheet=URL_SHEET)
+    # Membersihkan data yang kosong agar tidak dianggap terisi
+    df_existing = df_existing.dropna(subset=['Nomor Kursi', 'Nama Penumpang'])
     booked_seats = dict(zip(df_existing['Nomor Kursi'].astype(int), df_existing['Nama Penumpang']))
 except:
+    df_existing = pd.DataFrame(columns=['Nomor Kursi', 'Nama Penumpang'])
     booked_seats = {}
 
 st.title("🚌 Reservasi Kursi Bus")
